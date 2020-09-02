@@ -20,8 +20,15 @@ steps:
     projects: '**/*.csproj'
     feedsToUse: 'select'
 
-- script: dotnet build **/BlogMyself.sln --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+- task: MSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    msbuildArchitecture: 'x64'
+    platform: 'x64'
+    configuration: 'Release'
+    restoreNugetPackages: true
+
+
 - task: DotNetCoreCLI@2
   displayName: Publish
   inputs:
