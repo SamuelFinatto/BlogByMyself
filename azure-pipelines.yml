@@ -11,6 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  platform: 'Any CPU'
 
 steps:
 - task: DotNetCoreCLI@2
@@ -24,10 +25,8 @@ steps:
   inputs:
     solution: '**/*.sln'
     msbuildArchitecture: 'x64'
-    platform: 'x64'
-    configuration: 'Release'
+    msbuildArguments: '/p:Configuration=$(BuildConfiguration) /p:Platform=$(platform)'
     restoreNugetPackages: true
-
 
 - task: DotNetCoreCLI@2
   displayName: Publish
