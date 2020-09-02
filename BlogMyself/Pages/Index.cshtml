@@ -7,4 +7,31 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <form method="post">
+        Name:
+        <input asp-for="ContactDTO.Name" />
+        Phone:
+        <input asp-for="ContactDTO.Phone" />
+        <input type="submit" />
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model.Contacts)
+            {
+                <tr>
+                    <td> @contact.Name  </td>
+                    <td>@contact.Phone</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
