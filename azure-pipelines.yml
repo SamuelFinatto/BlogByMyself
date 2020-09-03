@@ -12,6 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   platform: 'Any CPU'
+  solution: 'BlogMyself/BlogMyself.sln'
 
 steps:
 - task: DotNetCoreCLI@2
