@@ -39,5 +39,11 @@ namespace BlogMyself.Pages
             await _service.AddContactAsync(ContactDTO);
             return RedirectToAction("Index");
         }
+
+        public async Task<ActionResult> OnPostWay2(string data)
+        {
+            await _service.RemoveAllContactsAsync();
+            return RedirectToAction("Index");
+        }
     }
 }

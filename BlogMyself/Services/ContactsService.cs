@@ -34,5 +34,15 @@ namespace BlogMyself.Services
                               Phone = con.Phone
                           }).ToListAsync(ct);
         }
+
+        public async Task<bool> RemoveAllContactsAsync(CancellationToken ct = default)
+        {
+            var contacts = _context.Contact.Select(x => x);
+
+            _context.Contact.RemoveRange(contacts);
+
+            await _context.SaveChangesAsync(ct);
+            return true;
+        }
     }
 }
