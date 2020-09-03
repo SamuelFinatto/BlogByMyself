@@ -28,14 +28,23 @@ steps:
     msbuildArguments: '/p:Configuration=$(BuildConfiguration) /p:Platform="$(platform)"'
     restoreNugetPackages: true
 
-- task: DotNetCoreCLI@2
-  displayName: Publish
+- task: VSBuild@1
+  displayName: 'Build Solution'
   inputs:
-    command: publish
-    publishWebProjects: false
-    projects: '**/*.sln'
-    arguments: '--configuration $(BuildConfiguration) --output "$(build.artifactstagingdirectory)"'
-    zipAfterPublish: True
+    solution: '$(solution)'
+    msbuildArgs: '
+            /p:DeployOnBuild=true 
+            /p:WebPublishMethod=Package 
+            /p:SkipInvalidConfigurations=true 
+            /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
+    platform: '"$(platform)"'
+    configuration: '$(BuildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
