@@ -21,13 +21,6 @@ steps:
     projects: '**/*.csproj'
     feedsToUse: 'select'
 
-- task: MSBuild@1
-  inputs:
-    solution: '**/*.sln'
-    msbuildArchitecture: 'x64'
-    msbuildArguments: '/p:Configuration=$(BuildConfiguration) /p:Platform="$(platform)"'
-    restoreNugetPackages: true
-
 - task: VSBuild@1
   displayName: 'Build Solution'
   inputs:
@@ -36,9 +29,7 @@ steps:
             /p:DeployOnBuild=true 
             /p:WebPublishMethod=Package 
             /p:SkipInvalidConfigurations=true 
-            /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
-    platform: '"$(platform)"'
-    configuration: '$(BuildConfiguration)'
+            /p:PackageLocation="$(Build.ArtifactStagingDirectory)" /p:Configuration=$(BuildConfiguration) /p:Platform="$(platform)"'
 
 - task: PublishBuildArtifacts@1
   inputs:
