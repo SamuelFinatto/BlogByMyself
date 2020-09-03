@@ -7,22 +7,36 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-2019'
 
 variables:
   buildConfiguration: 'Release'
+  platform: 'Any CPU'
+  solution: 'BlogMyself/BlogMyself.sln'
 
 steps:
-- script: dotnet build **/BlogMyself.sln --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
 - task: DotNetCoreCLI@2
-  displayName: Publish
+  displayName: 'Restore'
   inputs:
-    command: publish
-    publishWebProjects: false
-    projects: '**/*.sln'
-    arguments: '--configuration $(BuildConfiguration) --output "$(build.artifactstagingdirectory)"'
-    zipAfterPublish: True
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+- task: VSBuild@1
+  displayName: 'Build Solution'
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '
+            /p:DeployOnBuild=true 
+            /p:WebPublishMethod=Package 
+            /p:SkipInvalidConfigurations=true 
+            /p:PackageLocation="$(Build.ArtifactStagingDirectory)" /p:Configuration=$(BuildConfiguration) /p:Platform="$(platform)"'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
